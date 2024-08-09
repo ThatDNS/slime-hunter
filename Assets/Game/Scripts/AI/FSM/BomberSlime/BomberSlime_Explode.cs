@@ -21,10 +21,4 @@ public class BomberSlime_Explode : BasicSlime_BaseState
         bFSM.slimeAnimator.SetTrigger(bFSM.PlayerInRangeTrigger);
         bFSM.Explode();
     }
-
-    public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        // Die
-        bFSM.ChangeState(bFSM.DeadStateName);
-    }
 }
