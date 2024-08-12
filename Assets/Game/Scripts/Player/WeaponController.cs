@@ -18,10 +18,8 @@ public class WeaponController : MonoBehaviour
     public WeaponTrail weaponTrail;
     public AnimationClip baseAttackClip;
 
-    [Header("Audio")]
-    public UnityEvent onWeaponAttack;
-
-    // Weapon&Animation
+    [Header("Weapon & Animation")]
+    float specialAttackDuration = 4.0f;
     [HideInInspector, NonSerialized] public AttackState currentAttackState = AttackState.INACTIVE;
     [HideInInspector] public bool isPerformingSpecialAttack = false;
     private AnimatorOverrideController _overrideAnimatorController;
@@ -263,6 +261,7 @@ public class WeaponController : MonoBehaviour
             isPerformingSpecialAttack)
             return;
 
+        AudioManager.Instance.SpecialAttackInstance.start();
         GameManager.Instance.PlayerSpecialAttack = 0.0f;
 
         StartCoroutine(PerformSpecialAttack());
@@ -271,27 +270,26 @@ public class WeaponController : MonoBehaviour
     IEnumerator PerformSpecialAttack()
     {
         isPerformingSpecialAttack = true;
-        weaponTrail.SetWeapon(true);
+        StartCoroutine(weaponTrail.RunSpecialAttack(specialAttackDuration));
         if (CurrentWeapon.attackMoves.Count > 0)
         {
             weaponTrail.SetWeaponProps(CurrentWeapon.attackMoves[0]);
         }
         _animator.SetBool(specialAttackBoolHash, true);
 
-        // TODO: Hardcoded special attack rotation and duration
-        float animationTime = 4.0f;
         float elapsed = 0.0f;
-        while (elapsed < animationTime)
+        while (elapsed < specialAttackDuration)
         {
             elapsed += Time.unscaledDeltaTime;
             // Animation no longer rotates the player so we manually rotate
+            // TODO: Hardcoded special attack rotation
             gameObject.transform.Rotate(0, -Time.unscaledDeltaTime*1000, 0);
             yield return null;
         }
 
-        weaponTrail.SetWeapon(false);
         isPerformingSpecialAttack = false;
         _animator.SetBool(specialAttackBoolHash, false);
+        AudioManager.Instance.SpecialAttackInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
 
     public bool DashInterruptAttack()

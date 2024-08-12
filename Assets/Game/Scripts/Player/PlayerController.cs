@@ -1,12 +1,8 @@
-using Cinemachine;
 using FMODUnity;
 using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.XInput;
 
 [RequireComponent(typeof(CharacterController), typeof(WeaponController))]
 public class PlayerController : MonoBehaviour
@@ -121,7 +117,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (weaponController.isPerformingSpecialAttack)
         {
-            _moveSpeed *= slowDownMultiplierOnSpecialAttack;
+            // Don't Rotate
         }
         else if (moveDirection != Vector3.zero) // Only rotate to movement when not attacking
         {
@@ -162,6 +158,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator PerformDash(Vector3 dashDirection)
     {
+        RuntimeManager.PlayOneShot(AudioManager.Config.dash);
         animator.SetBool(dashBoolash, true);
         _isDashing = true;
 

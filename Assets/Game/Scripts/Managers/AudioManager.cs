@@ -8,37 +8,51 @@ public class AudioManager : Singleton<AudioManager>
 {
     [SerializeField] private AudioConfig config;
 
+    private Bus masterBus;
     private int enemiesAlerted = 0;
     private PARAMETER_ID combatIntensityParamID;
+    private PARAMETER_ID villagePhaseParamID;
     private bool forceAlert = false;
 
-    // Footsteps
-    private EventInstance walkDirt;
-    private EventInstance walkGrass;
-    private EventInstance walkGravel;
+    // SFX
+    public EventInstance SpecialAttackInstance { get; set; }
 
     // Music
-    private EventInstance menuInstance;
-    private EventInstance explorationInstance;
-    private EventInstance villageInstance;
+    public EventInstance MenuInstance { get; set; }
+    public EventInstance ExplorationInstance { get; set; }
+    public EventInstance VillageInstance { get; set; }
 
     private Dictionary<string, EventInstance> soundEffectInstances = new Dictionary<string, EventInstance>();
     private Dictionary<string, EventInstance> uiSoundEffectInstances = new Dictionary<string, EventInstance>();
 
+  
     public float CombatIntensity { get { return (config != null) ? (float)enemiesAlerted / config.maxEnemyIntensity : 0f; } }
     public static AudioConfig Config => Instance.config;
 
     void Start()
     {
-        menuInstance = RuntimeManager.CreateInstance(config.menuEvent);
-        explorationInstance = RuntimeManager.CreateInstance(config.explorationEvent);
-        villageInstance = RuntimeManager.CreateInstance(config.villageEvent);
+        // Retrieve the master bus
+        masterBus = RuntimeManager.GetBus("bus:/"); // "bus:/" is the path to the master bus
 
+        // Music
+        MenuInstance = RuntimeManager.CreateInstance(config.menuEvent);
+        ExplorationInstance = RuntimeManager.CreateInstance(config.explorationEvent);
+        VillageInstance = RuntimeManager.CreateInstance(config.villageEvent);
+
+        // SFX
+        SpecialAttackInstance = RuntimeManager.CreateInstance(config.specialAttack);
+        InventoryManager.Instance.OnItemAdded += e => RuntimeManager.PlayOneShot(Config.itemPickup);
+
+        // Param IDs
         EventDescription eventDescription;
-        explorationInstance.getDescription(out eventDescription);
+        ExplorationInstance.getDescription(out eventDescription);
         PARAMETER_DESCRIPTION parameterDescription;
         eventDescription.getParameterDescriptionByName("CombatIntensity", out parameterDescription);
         combatIntensityParamID = parameterDescription.id;
+
+        VillageInstance.getDescription(out eventDescription);
+        eventDescription.getParameterDescriptionByName("VillagePhase", out parameterDescription);
+        villagePhaseParamID = parameterDescription.id;
 
         GameManager.Instance.OnGameStateChange += HandleBGMusic;
     }
@@ -48,16 +62,26 @@ public class AudioManager : Singleton<AudioManager>
         switch (state)
         {
             case GameState.MAIN_MENU:
-                menuInstance.start();
+                masterBus.stopAllEvents(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                MenuInstance.start();
                 break;
             case GameState.GAMEPLAY:
-                menuInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-                explorationInstance.start();
-                //villageInstance.start();
+                MenuInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                PLAYBACK_STATE pbState;
+                ExplorationInstance.getPlaybackState(out pbState);
+                if (pbState != PLAYBACK_STATE.PLAYING)
+                    ExplorationInstance.start();
+                ExplorationInstance.setVolume(1.0f);
+                break;
+            case GameState.PAUSED:
+                ExplorationInstance.setVolume(0.5f);
                 break;
             case GameState.LOADING:
                 break;
             case GameState.GAME_OVER:
+                masterBus.stopAllEvents(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                VillageInstance.setParameterByID(villagePhaseParamID, 1);
+                VillageInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 break;
             default:
                 break;
@@ -69,9 +93,6 @@ public class AudioManager : Singleton<AudioManager>
         // Ensure volume is clamped between 0.0 and 1.0
         value = Mathf.Clamp01(value);
 
-        // Retrieve the master bus
-        Bus masterBus = RuntimeManager.GetBus("bus:/"); // "bus:/" is the path to the master bus
-
         // Set the volume on the master bus
         masterBus.setVolume(value);
     }
@@ -79,13 +100,13 @@ public class AudioManager : Singleton<AudioManager>
     public void ForceAlert(float value)
     {
         forceAlert = true;
-        explorationInstance.setParameterByID(combatIntensityParamID, value);
+        ExplorationInstance.setParameterByID(combatIntensityParamID, value);
     }
 
     public void ReleaseAlert()
     {
         forceAlert = false;
-        explorationInstance.setParameterByID(combatIntensityParamID, CombatIntensity);
+        ExplorationInstance.setParameterByID(combatIntensityParamID, CombatIntensity);
     }
 
     public void OnEnemyAlerted()
@@ -93,7 +114,7 @@ public class AudioManager : Singleton<AudioManager>
         enemiesAlerted++;
         // FMOD will clamp intensity
         if (forceAlert) return;
-        explorationInstance.setParameterByID(combatIntensityParamID, CombatIntensity);
+        ExplorationInstance.setParameterByID(combatIntensityParamID, CombatIntensity);
     }
 
     public void OnEnemyUnalerted()
@@ -101,6 +122,6 @@ public class AudioManager : Singleton<AudioManager>
         enemiesAlerted = Mathf.Max(enemiesAlerted-1, 0);
         // FMOD will clamp intensity
         if (forceAlert) return;
-        explorationInstance.setParameterByID(combatIntensityParamID, CombatIntensity);
+        ExplorationInstance.setParameterByID(combatIntensityParamID, CombatIntensity);
     }
 }

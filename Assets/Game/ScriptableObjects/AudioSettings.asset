@@ -40,7 +40,7 @@ MonoBehaviour:
       Data2: 1106262454
       Data3: 1495608215
       Data4: -955883376
-    Path: event:/SoundEffects/WalkDirt
+    Path: event:/SoundEffects/Movement/WalkDirt
   walkGrass:
     Guid:
       Data1: 1294741664
@@ -55,6 +55,27 @@ MonoBehaviour:
       Data3: 714917030
       Data4: -1570818045
     Path: event:/SoundEffects/Movement/WalkGravel
+  dash:
+    Guid:
+      Data1: -1741830718
+      Data2: 1098155437
+      Data3: -266106464
+      Data4: 97751210
+    Path: event:/SoundEffects/Movement/Dash
+  specialAttack:
+    Guid:
+      Data1: 1349944211
+      Data2: 1202310955
+      Data3: 182005950
+      Data4: -1788596010
+    Path: event:/SoundEffects/Weapon/SwordSpecial
+  itemPickup:
+    Guid:
+      Data1: -1634222198
+      Data2: 1224846108
+      Data3: 495415217
+      Data4: -724653650
+    Path: event:/SoundEffects/Collectibles/Pickup
   buttonPressEvent:
     Guid:
       Data1: -1639830083

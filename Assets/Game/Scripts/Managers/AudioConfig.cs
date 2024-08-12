@@ -16,6 +16,9 @@ public class AudioConfig : ScriptableObject
     public EventReference walkDirt;
     public EventReference walkGrass;
     public EventReference walkGravel;
+    public EventReference dash;
+    public EventReference specialAttack;
+    public EventReference itemPickup;
 
     [Header("UI")]
     public EventReference buttonPressEvent;
