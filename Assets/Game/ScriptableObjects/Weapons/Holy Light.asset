@@ -26,14 +26,13 @@ MonoBehaviour:
     direction: {x: 0, y: 0, z: 0}
     effect: {fileID: 0}
     forceApply: 0
-  range: 2
+  range: 2.5
   hitLayers:
     serializedVersion: 2
     m_Bits: 128
   weaponModel: {fileID: 7666448512491557995, guid: 6eb18d9d451e45e4bb30bf34fdb5dbfb,
     type: 3}
-  hitSound: {fileID: 0}
-  material: {fileID: 2100000, guid: 76b12491295cfc84fb1848e4e8d655ca, type: 2}
+  material: {fileID: 2100000, guid: 8d762ff93aff8f8448f2de6c6d9687ee, type: 2}
   attackMoves:
   - clip: {fileID: -4548623917672641977, guid: 306a5797a89f7c74e9368d8a28320dbb, type: 3}
     animationDelay: 0.2
@@ -50,6 +49,13 @@ MonoBehaviour:
     angleStart: 8
     rotationGamma: 2
     voranoiPeak: 0.073
+    audioHitEvent:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
   - clip: {fileID: 3247394562842503963, guid: 0c40dfcdc17ee8343a5d334176eea1c9, type: 3}
     animationDelay: 0.15
     animationDuration: 0.2
@@ -65,6 +71,13 @@ MonoBehaviour:
     angleStart: 90
     rotationGamma: 2
     voranoiPeak: 0.171
+    audioHitEvent:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
   - clip: {fileID: -9077693007153932888, guid: 69c0cc6074ec8754dbb8a3411126b7fd, type: 3}
     animationDelay: 0.15
     animationDuration: 0.45
@@ -80,3 +93,10 @@ MonoBehaviour:
     angleStart: 206
     rotationGamma: 2
     voranoiPeak: 0.182
+    audioHitEvent:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
