@@ -21,7 +21,7 @@ MonoBehaviour:
   value: 0
   weight: 7
   damage:
-    value: 21
+    value: 22
     knockback: 1
     direction: {x: 0, y: 0, z: 0}
     effect: {fileID: 0}
