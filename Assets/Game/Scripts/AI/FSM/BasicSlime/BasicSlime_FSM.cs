@@ -100,7 +100,7 @@ public class BasicSlime_FSM : FSM
         float intensity = 0.0f;
         float intensityDelta = attackGlowIntensity / steps;
         float deltaTime = attackEmissionTime / steps;
-        while (steps > 0)
+        while (steps > 0 && attackMat != null)
         {
             --steps;
             intensity += intensityDelta;

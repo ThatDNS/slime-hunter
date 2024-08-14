@@ -29,6 +29,15 @@ public abstract class FSM : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        InternalFSMBaseState[] behaviours = fsmAnimator.GetBehaviours<InternalFSMBaseState>();
+        foreach (var behaviour in behaviours)
+        {
+            behaviour.Init(gameObject, this);
+        }
+    }
+
     // Deny any state changes temporarily
     public void LockStateForSeconds(float duration)
     {

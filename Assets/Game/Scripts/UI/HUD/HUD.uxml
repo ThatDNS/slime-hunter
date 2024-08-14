@@ -30,8 +30,8 @@
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="Red_Alert" class="redalert" style="flex-grow: 1; position: absolute; -unity-background-scale-mode: stretch-to-fill; background-image: url(&quot;project://database/Assets/Game/Textures/UI/Rectangle%2047playersttacked.png?fileID=21300000&amp;guid=000297ea16efd484185e1cd60150cb9f&amp;type=3#Rectangle 47playersttacked&quot;); -unity-background-image-tint-color: rgba(255, 255, 255, 0.49); opacity: 0; width: 100%; height: 100%;" />
-        <ui:VisualElement name="Blank_Centre" style="flex-grow: 0; width: 40%;" />
+        <ui:VisualElement name="Red_Alert" class="redalert" style="flex-grow: 1; position: absolute; -unity-background-scale-mode: stretch-to-fill; background-image: url(&quot;project://database/Assets/Game/Textures/UI/Rectangle%2047playersttacked.png?fileID=21300000&amp;guid=000297ea16efd484185e1cd60150cb9f&amp;type=3#Rectangle 47playersttacked&quot;); -unity-background-image-tint-color: rgba(255, 255, 255, 0.49); opacity: 0; width: 100%; height: 100%; display: flex;" />
+        <ui:VisualElement name="Blank_Centre" style="flex-grow: 0; width: 40%; display: flex; opacity: 1;" />
         <ui:VisualElement name="Right" style="flex-grow: 0; width: 30%; flex-direction: column;">
             <ui:VisualElement name="QuestContainer" style="flex-grow: 0; height: 50%; margin-right: 40px; margin-top: 15px;">
                 <ui:VisualElement name="Header" style="flex-grow: 0; flex-direction: row-reverse; -unity-text-align: lower-right; align-self: flex-end; margin-right: 15px;">
@@ -57,7 +57,7 @@
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="Death" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.5); position: absolute; width: 100%; height: 100%; opacity: 1;">
+        <ui:VisualElement name="Death" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.5); position: absolute; width: 100%; height: 100%; opacity: 1; display: none;">
             <ui:Label tabindex="-1" text="You got Slimed !!!" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Slimed" style="-unity-text-align: upper-center; font-size: 80px; color: rgb(161, 37, 49); margin-top: 460px; margin-bottom: 97px; -unity-font-definition: resource(&apos;Fonts/HywenHei SDF 1&apos;); -unity-font: initial; -unity-text-outline-color: rgb(255, 255, 255); -unity-text-outline-width: 1px;" />
             <ButtonSH text="Try Again" name="Tryagain" class="button" style="font-size: 25px; display: flex; width: 160px; align-self: center; background-color: rgba(70, 187, 202, 0); border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-top-left-radius: 18px; border-top-right-radius: 18px; border-bottom-right-radius: 18px; border-bottom-left-radius: 18px;" />
             <ui:VisualElement name="Slime_Alert" style="flex-grow: 1; position: absolute; -unity-background-scale-mode: stretch-to-fill; background-image: url(&quot;project://database/Assets/Game/Textures/UI/Rectangle%2047playersttacked.png?fileID=21300000&amp;guid=000297ea16efd484185e1cd60150cb9f&amp;type=3#Rectangle 47playersttacked&quot;); -unity-background-image-tint-color: rgb(0, 149, 73); opacity: 1; width: 100%; height: 100%;" />

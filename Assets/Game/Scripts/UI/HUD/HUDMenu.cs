@@ -297,7 +297,10 @@ public class HUDMenu : Menu
 
     public void UpdateWeaponIcon(Sprite icon)
     {
-        weaponIcon.style.backgroundImage = icon?.texture;
+        if (weaponIcon != null && icon != null)
+        {
+            weaponIcon.style.backgroundImage = icon.texture;
+        }
     }
 
     // ------------------------------ Spells -------------------------------
