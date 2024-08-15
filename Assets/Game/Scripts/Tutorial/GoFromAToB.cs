@@ -45,5 +45,4 @@ public class GoFromAToB : MonoBehaviour
 
         callbackOnB.Invoke();
     }
-
 }

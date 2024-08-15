@@ -1,6 +1,7 @@
 using Ink.Runtime;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -128,10 +129,7 @@ public class HUDMenu : Menu
 
     private void FixedUpdate()
     {
-        if (navigate)
-        {
-            UpdateCompass();
-        }
+        UpdateCompass();
 
         if (gameManager.PlayerSpecialAttack == 1.0f)
         {
@@ -364,7 +362,11 @@ public class HUDMenu : Menu
 
     void UpdateCompass()
     {
-        if (GameManager.Instance.PlayerRef == null)
+        Transform cameraT = CameraManager.ActiveCamera.transform;
+        // Compass rotation
+        compassContainer.transform.rotation = Quaternion.Euler(0, 0, cameraBaseRotation - cameraT.eulerAngles.y);
+
+        if (GameManager.Instance.PlayerRef == null || !navigate)
         {
             return;
         }
@@ -373,9 +375,6 @@ public class HUDMenu : Menu
         direction.y = 0;
         direction.Normalize();
         float angle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg;
-        Transform cameraT = CameraManager.ActiveCamera.transform;
-        // Compass rotation
-        compassContainer.transform.rotation = Quaternion.Euler(0, 0, cameraBaseRotation - cameraT.eulerAngles.y);
         // Needle rotation
         compassNeedle.transform.rotation = Quaternion.Euler(0, 0, cameraBaseRotation - angle + compassRotationOffset);
     }
@@ -389,6 +388,7 @@ public class HUDMenu : Menu
     public void StopNavigation()
     {
         navigate = false;
+        compassNeedle.transform.rotation = Quaternion.Euler(0, 0, 0);  // North
         navTarget = Vector3.zero;
     }
 

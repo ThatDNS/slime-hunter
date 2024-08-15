@@ -9,6 +9,7 @@ public struct QuestObjectiveData
     public Transform target;
     public bool showOverheadNavigation;
     public float navYOffset;
+    public float endProximity;
 }
 
 public class QuestTrigger : MonoBehaviour
@@ -16,11 +17,10 @@ public class QuestTrigger : MonoBehaviour
     [SerializeField] QuestSO quest;
     [SerializeField] QuestObjectiveData[] objectives;
     [SerializeField] GameObject trackerCanvasGO;
-    [SerializeField] float endProximity = 1.0f;
 
-    public UnityEvent onCompleteEvent;
-    public bool triggered = false;
+    public List<UnityEvent> onCompleteEvent = new List<UnityEvent>();
 
+    bool triggered = false;
     GameObject _prevTracker;
 
     private void Start()
@@ -40,8 +40,10 @@ public class QuestTrigger : MonoBehaviour
             // Clear the quest objective when user reaches in proximity
             float distance = Vector3.Distance(GameManager.Instance.PlayerRef.transform.position,
                                               quest.objectives[quest.currentObjective].target.position);
-            if (distance < endProximity)
+            if (distance < objectives[quest.currentObjective].endProximity)
             {
+                // Quest Objective complete!
+                onCompleteEvent[quest.currentObjective].Invoke();
                 QuestManager.Instance.ClearQuestObjective(quest);
                 // Clear previous tracker
                 if (_prevTracker != null)
@@ -68,18 +70,25 @@ public class QuestTrigger : MonoBehaviour
     {
         if (!triggered && other.CompareTag("Player"))
         {
-            triggered = true;
-            QuestManager.Instance.AddQuest(quest);
+            StartQuest();
+        }
+    }
 
-            // TEMPORARY for testing
-            QuestManager.Instance.SetQuestAsActive(quest);
+    public void StartQuest()
+    {
+        if (triggered) return;
 
+        triggered = true;
+        QuestManager.Instance.AddQuest(quest);
+
+        // TEMPORARY for testing
+        QuestManager.Instance.SetQuestAsActive(quest);
+
+        // Add tracker if required
+        if (objectives[quest.currentObjective].showOverheadNavigation)
+        {
             // Add tracker if required
-            if (objectives[quest.currentObjective].showOverheadNavigation)
-            {
-                // Add tracker if required
-                AddTracker();
-            }
+            AddTracker();
         }
     }
 
@@ -93,6 +102,9 @@ public class QuestTrigger : MonoBehaviour
 
     private void OnValidate()
     {
+        if (objectives == null)
+            return;
+
         if (quest != null && objectives.Length != quest.objectives.Count)
         {
             Debug.LogError("Invalid objectives! They do not match the quest.");
@@ -101,11 +113,14 @@ public class QuestTrigger : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (objectives.Length > 0)
+        if (objectives != null && objectives.Length > 0)
         {
             foreach (QuestObjectiveData objectiveData in objectives)
             {
-                DebugExtension.DrawCircle(objectiveData.target.transform.position, Vector3.up, Color.black, endProximity);
+                if (objectiveData.target != null)
+                {
+                    DebugExtension.DrawCircle(objectiveData.target.transform.position, Vector3.up, Color.black, objectiveData.endProximity);
+                }
             }
         }
     }
