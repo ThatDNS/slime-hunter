@@ -122,7 +122,7 @@ MonoBehaviour:
   healthCanvas: {fileID: 0}
   knockbackTime: 0.25
   slowDownOnHitMultiplier: 0.2
-  slowDownTime: 0.5
+  slowDownTime: 0.2
   playerModel: {fileID: 7701449603010986479}
 --- !u!114 &606331671084474555
 MonoBehaviour:
