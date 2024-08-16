@@ -1,12 +1,16 @@
+using FMOD.Studio;
+using FMODUnity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 using UnityEngine.UIElements;
 
-public class PauseMenu : Menu
+public class PauseMenu : TabbedMenu
 {
     VisualElement pauseRootWrapperVE;
+    TabbedMenu tabbedMenu;
     float cachedAlpha;
     bool isMapTabSelected = false;
 
@@ -51,6 +55,19 @@ public class PauseMenu : Menu
         menuTabVE.RegisterCallback<ClickEvent>(evt => { NonMapMenuSelected(); });
 
         GameManager.Instance.OnGameStateChange += OnPause;
+        InputManager.Instance.exitEvent += ExitPause;
+    }
+
+    public override void Show()
+    {
+        base.Show();
+        InputManager.Instance.exitEvent += ExitPause;
+    }
+
+    public override void Hide()
+    {
+        base.Hide();
+        InputManager.Instance.exitEvent -= ExitPause;
     }
 
     private void Settings()
@@ -62,6 +79,14 @@ public class PauseMenu : Menu
     private void LinkInventoryStatsUIToPlayer()
     {
         GameManager.Instance.OnPlayerHealthChange += (int value) => healthValue.text = value.ToString();
+    }
+
+    public void ExitPause()
+    {
+        if (GameManager.Instance.GameState == GameState.PAUSED)
+        {
+            GameManager.Instance.GameState = GameState.GAMEPLAY;
+        }
     }
 
     public void OnPause(GameState state)
@@ -93,7 +118,29 @@ public class PauseMenu : Menu
         }
     }
 
-    void MapMenuSelected()
+    public override void SwitchTab(string tabName)
+    {
+        if (IsVisible && controller.CurrentTab() == tabName)
+        {
+            NonMapMenuSelected();
+            Hide();
+            GameManager.Instance.GameState = GameState.GAMEPLAY;
+            return;
+        }
+
+        GameManager.Instance.GameState = GameState.PAUSED;
+        controller.SwitchTab(tabName);
+        RuntimeManager.PlayOneShot(AudioManager.Config.buttonPressEvent);
+        if (tabName == "MapTab")
+        {
+            MapMenuSelected();
+        } else
+        {
+            NonMapMenuSelected();
+        }
+    }
+
+    public void MapMenuSelected()
     {
         isMapTabSelected = true;
         ToggleBackgroundAlpha(false);
@@ -102,7 +149,7 @@ public class PauseMenu : Menu
         ShowHideMapCamera(true);
     }
 
-    void NonMapMenuSelected()
+    public void NonMapMenuSelected()
     {
         isMapTabSelected = false;
         ToggleBackgroundAlpha(true);

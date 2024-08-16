@@ -28,6 +28,7 @@ public class InputManager : Singleton<InputManager>
     Action<InputContext> spell1Action;
     Action<InputContext> spell2Action;
 
+    public event Action exitEvent = delegate { };
     // Used for dash tutorial
     public Action<InputContext> OnDashAction;
 
@@ -36,8 +37,7 @@ public class InputManager : Singleton<InputManager>
     private void Awake()
     {
         // Setup Input Sprite Settings
-        if (_spriteSettings != null)
-            _spriteSettings.InitializeDictionaries();
+        _spriteSettings?.InitializeDictionaries();
         // Enable InputActions
         _inputActions = new PlayerInputActions();
         _inputActions.Enable();
@@ -60,16 +60,31 @@ public class InputManager : Singleton<InputManager>
         TogglePauseControl(false);
     }
 
+    // For slow access when dictionaries may not be available;
+    public Sprite FindSpriteByAction(string actionName)
+    {
+        ActionSpriteMap map = _spriteSettings.FindMapByName(actionName);
+
+        if (Gamepad.current != null)
+        {
+            return map.gamepadSprite != null ? map.gamepadSprite : _spriteSettings.defaultSprite;
+        }
+        else
+        {
+            return map.keyboardSprite != null ? map.keyboardSprite : _spriteSettings.defaultSprite;
+        }
+    }
+
     public Sprite StringActionToSprite(string actionName)
     {
         // TODO: Naive solution - returns gamepad controls as long as one is plugged in
         if (Gamepad.current != null)
         {
-            return _spriteSettings.gamepadSpriteMap.TryGetValue(actionName, out var sprite) ? sprite : null;
+            return _spriteSettings.gamepadSpriteMap.TryGetValue(actionName, out var sprite) ? sprite : _spriteSettings.defaultSprite;
         }
         else
         {
-            return _spriteSettings.keyboardSpriteMap.TryGetValue(actionName, out var sprite) ? sprite : null;
+            return _spriteSettings.keyboardSpriteMap.TryGetValue(actionName, out var sprite) ? sprite : _spriteSettings.defaultSprite;
         }
     }
 
@@ -92,7 +107,7 @@ public class InputManager : Singleton<InputManager>
                 break;
 
             case GameState.GAMEPLAY:
-                ToggleUIControls(true);
+                TogglePauseControl(true);
                 TogglePlayerControls(true);
                 break;
 
@@ -208,7 +223,10 @@ public class InputManager : Singleton<InputManager>
 
     private void _AddUIControls()
     {
+        _UIActions.Exit.performed += Exit;
         _UIActions.Pause.performed += Pause;
+        _UIActions.Inventory.performed += Inventory;
+        _UIActions.Map.performed += Map;
         _UIActions.SkipDialogue.performed += DialogueManager.Instance.SkipDialogue;
     }
 
@@ -234,13 +252,43 @@ public class InputManager : Singleton<InputManager>
     private void _RemoveUIControls()
     {
         _UIActions.Pause.performed -= Pause;
+        _UIActions.Inventory.performed -= Inventory;
+        _UIActions.Map.performed -= Map;
         _UIActions.SkipDialogue.performed -= DialogueManager.Instance.SkipDialogue;
+    }
+
+    private void Exit(InputContext context)
+    {
+        // TODO: Hacky way to allow ESC to open pause while also being the close button
+        if (exitEvent.GetInvocationList().Length > 2)
+        {
+            exitEvent?.Invoke();
+            return;
+        }
+
+        if (GameManager.Instance.GameState == GameState.GAMEPLAY)
+        {
+            PauseMenu pauseMenu = UIManager.Instance.pauseMenu as PauseMenu;
+            pauseMenu.SwitchTab("MenuTab");
+        }
     }
 
     private void Pause(InputContext context)
     {
-        GameManager.Instance.GameState = GameManager.Instance.GameState == GameState.PAUSED ?
-             GameState.GAMEPLAY : GameState.PAUSED;
+        PauseMenu pauseMenu = UIManager.Instance.pauseMenu as PauseMenu;
+        pauseMenu.SwitchTab("MenuTab");
+    }
+
+    private void Inventory(InputContext context)
+    {
+        PauseMenu pauseMenu = UIManager.Instance.pauseMenu as PauseMenu;
+        pauseMenu.SwitchTab("InventoryTab");
+    }
+
+    private void Map(InputContext context)
+    {
+        PauseMenu pauseMenu = UIManager.Instance.pauseMenu as PauseMenu;
+        pauseMenu.SwitchTab("MapTab");
     }
 
     private void TrackMovement(InputContext context)

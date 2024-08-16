@@ -42,6 +42,7 @@ public class AudioManager : Singleton<AudioManager>
         // SFX
         SpecialAttackInstance = RuntimeManager.CreateInstance(config.specialAttack);
         InventoryManager.Instance.OnItemAdded += e => RuntimeManager.PlayOneShot(Config.itemPickup);
+        InputManager.Instance.exitEvent += () => RuntimeManager.PlayOneShot(Config.errorEvent);
 
         // Param IDs
         EventDescription eventDescription;
@@ -71,21 +72,36 @@ public class AudioManager : Singleton<AudioManager>
                 ExplorationInstance.getPlaybackState(out pbState);
                 if (pbState != PLAYBACK_STATE.PLAYING)
                     ExplorationInstance.start();
-                ExplorationInstance.setVolume(1.0f);
                 break;
             case GameState.PAUSED:
-                ExplorationInstance.setVolume(0.5f);
                 break;
             case GameState.LOADING:
                 break;
             case GameState.GAME_OVER:
                 masterBus.stopAllEvents(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 VillageInstance.setParameterByID(villagePhaseParamID, 1);
-                VillageInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                VillageInstance.start();
                 break;
             default:
                 break;
         }
+    }
+
+    public void ExploreToVillage()
+    {
+        VillageInstance.setParameterByID(villagePhaseParamID, 3);
+        PLAYBACK_STATE pbState;
+        VillageInstance.getPlaybackState(out pbState);
+        if (pbState != PLAYBACK_STATE.PLAYING)
+            VillageInstance.start();
+        ExplorationInstance.setParameterByName("Fade", 1);
+        VillageInstance.setParameterByName("Fade", 0);
+    }
+
+    public void VillageToExplore()
+    {
+        ExplorationInstance.setParameterByName("Fade", 0);
+        VillageInstance.setParameterByName("Fade", 1);
     }
 
     public void SetVolume(float value)
