@@ -177,12 +177,18 @@ public class WeaponController : MonoBehaviour
         weaponTrail.SetupWeaponSettings(CurrentWeapon); // TODO: Bandaid Fix Ensure Trail Is Setup
 
         // Get vector from player to mouse click
-        Vector2 clickPosition = Mouse.current.position.ReadValue();
+        Vector2 clickPosition = InputManager.PointerPosition;
         Vector2 currentScreenPos = Camera.main.WorldToScreenPoint(transform.position);
         Vector2 clickDirection = (clickPosition - currentScreenPos).normalized;
 
         // Align to camera forward
         Vector3 attackDirection = CameraManager.Instance.DirectionToCameraForward(transform.position, clickDirection);
+
+        if (InputManager.IsGamepad)
+        {
+            attackDirection = transform.forward;
+        }
+
         StartCoroutine(PerformAttack(CurrentWeapon.attackMoves[_attackMoveIndex], attackDirection));
 
         return true;
