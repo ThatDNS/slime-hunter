@@ -30,18 +30,19 @@ public class ShopMenu : Menu
 
     private void Start()
     {
-        VisualElement root = uiDocument.rootVisualElement;
         shopScrollView = root.Q<ScrollView>("ShopItemScrollView");
         slimeGelCount = root.Q<Label>("SlimeGelCount");
         InventoryManager.Instance.OnInventoryChanged += () =>
         {
             slimeGelCount.text = InventoryManager.Instance.TotalSlimeGel.ToString();
         };
+        UIManager.Instance.onSelect += OnSelect;
     }
 
     public override void Show()
     {
         base.Show();
+        InputManager.Instance.TogglePlayerMovement(false);
         slimeGelCount.text = InventoryManager.Instance.TotalSlimeGel.ToString();
         PopulateList();
         InputManager.Instance.exitEvent += Hide;
@@ -50,6 +51,7 @@ public class ShopMenu : Menu
     public override void Hide()
     {
         base.Hide();
+        InputManager.Instance.TogglePlayerMovement(true);
         InputManager.Instance.exitEvent -= Hide;
     }
 
@@ -79,13 +81,13 @@ public class ShopMenu : Menu
             itemDescription.text = saleItem.item.description;
             itemType.text = saleItem.item.itemType.ToString();
 
-            purchaseBtn.clicked += () =>
+            purchaseBtn.RegisterCallback<ClickEvent>(evt =>
             {
                 if (TryPurchase(saleItem))
                 {
                     listElement.RemoveFromHierarchy();
                 }
-            };
+            });
 
             // Create elements for item costs
             foreach (var itemCost in saleItem.costs)

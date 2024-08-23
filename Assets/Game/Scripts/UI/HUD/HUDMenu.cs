@@ -12,8 +12,6 @@ public class HUDMenu : Menu
     [Range(1, 100)][SerializeField] int maxAlert = 50;
     [SerializeField] float damageAlertTime = 1.0f;
 
-    VisualElement root;
-
     // Player
     VisualElement healthDamageVE;
     ProgressBar healthProgressBar;
@@ -77,7 +75,6 @@ public class HUDMenu : Menu
 
     void Start()
     {
-        root = uiDocument.rootVisualElement;
         gameManager = GameManager.Instance;
         questManager = QuestManager.Instance;
 
@@ -280,23 +277,23 @@ public class HUDMenu : Menu
         // Don't run remove aniamtion if already removed
         if (!ready && splAttackNotification.style.opacity == 0) yield break;
 
-        yield return GameManager.RunEasedLerp(
+        StartCoroutine(GameManager.RunEasedLerp(
             ready ? 0 : 1,
             ready ? 1 : 0,
-            0.2f,
+            0.3f,
             Easing.EaseInCubic,
             val =>
             {
                 splAttackNotification.style.opacity = val;
             },
             true
-        );
+        ));
 
         yield return GameManager.RunEasedLerp(
             1,
             1.5f,
-            1.0f,
-            Easing.EaseInQuart,
+            0.5f,
+            Easing.EaseOutCubic,
             val =>
             {
                 splAttackNotification.style.scale = new Scale(Vector2.one * val);
@@ -307,8 +304,8 @@ public class HUDMenu : Menu
         yield return GameManager.RunEasedLerp(
             1.5f,
             1,
-            1.0f,
-            Easing.EaseOutQuart,
+            0.5f,
+            Easing.EaseOutCubic,
             val =>
             {
                 splAttackNotification.style.scale = new Scale(Vector2.one * val);

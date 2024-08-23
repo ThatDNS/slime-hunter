@@ -516,7 +516,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""id"": ""21a682e8-fbd1-433e-a77a-95975d0cf1a9"",
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
-                    ""processors"": ""StickDeadzone"",
+                    ""processors"": ""StickDeadzone,ScaleVector2(x=1000,y=1000)"",
                     ""groups"": """",
                     ""action"": ""Joystick"",
                     ""isComposite"": false,
@@ -592,13 +592,22 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Move"",
+                    ""name"": ""Navigate"",
                     ""type"": ""Value"",
                     ""id"": ""901e886d-2b63-4601-919e-b32d978a5f0f"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Select"",
+                    ""type"": ""Button"",
+                    ""id"": ""ade4fab6-35e6-415f-ab0f-d2a5a2483c17"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -752,7 +761,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -763,7 +772,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -774,7 +783,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -785,7 +794,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -796,9 +805,31 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""16e7f9e8-c5d7-49fd-9589-a83e2794508d"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9f032b85-85d3-44b5-bd96-56372404703d"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -968,7 +999,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_UI_Exit = m_UI.FindAction("Exit", throwIfNotFound: true);
         m_UI_TabLeft = m_UI.FindAction("TabLeft", throwIfNotFound: true);
         m_UI_TabRight = m_UI.FindAction("TabRight", throwIfNotFound: true);
-        m_UI_Move = m_UI.FindAction("Move", throwIfNotFound: true);
+        m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
+        m_UI_Select = m_UI.FindAction("Select", throwIfNotFound: true);
         // Debug
         m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
         m_Debug_Continue = m_Debug.FindAction("Continue", throwIfNotFound: true);
@@ -1179,7 +1211,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_Exit;
     private readonly InputAction m_UI_TabLeft;
     private readonly InputAction m_UI_TabRight;
-    private readonly InputAction m_UI_Move;
+    private readonly InputAction m_UI_Navigate;
+    private readonly InputAction m_UI_Select;
     public struct UIActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1191,7 +1224,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Exit => m_Wrapper.m_UI_Exit;
         public InputAction @TabLeft => m_Wrapper.m_UI_TabLeft;
         public InputAction @TabRight => m_Wrapper.m_UI_TabRight;
-        public InputAction @Move => m_Wrapper.m_UI_Move;
+        public InputAction @Navigate => m_Wrapper.m_UI_Navigate;
+        public InputAction @Select => m_Wrapper.m_UI_Select;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1222,9 +1256,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @TabRight.started += instance.OnTabRight;
             @TabRight.performed += instance.OnTabRight;
             @TabRight.canceled += instance.OnTabRight;
-            @Move.started += instance.OnMove;
-            @Move.performed += instance.OnMove;
-            @Move.canceled += instance.OnMove;
+            @Navigate.started += instance.OnNavigate;
+            @Navigate.performed += instance.OnNavigate;
+            @Navigate.canceled += instance.OnNavigate;
+            @Select.started += instance.OnSelect;
+            @Select.performed += instance.OnSelect;
+            @Select.canceled += instance.OnSelect;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -1250,9 +1287,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @TabRight.started -= instance.OnTabRight;
             @TabRight.performed -= instance.OnTabRight;
             @TabRight.canceled -= instance.OnTabRight;
-            @Move.started -= instance.OnMove;
-            @Move.performed -= instance.OnMove;
-            @Move.canceled -= instance.OnMove;
+            @Navigate.started -= instance.OnNavigate;
+            @Navigate.performed -= instance.OnNavigate;
+            @Navigate.canceled -= instance.OnNavigate;
+            @Select.started -= instance.OnSelect;
+            @Select.performed -= instance.OnSelect;
+            @Select.canceled -= instance.OnSelect;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -1389,7 +1429,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnExit(InputAction.CallbackContext context);
         void OnTabLeft(InputAction.CallbackContext context);
         void OnTabRight(InputAction.CallbackContext context);
-        void OnMove(InputAction.CallbackContext context);
+        void OnNavigate(InputAction.CallbackContext context);
+        void OnSelect(InputAction.CallbackContext context);
     }
     public interface IDebugActions
     {
