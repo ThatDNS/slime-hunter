@@ -16,52 +16,52 @@ MonoBehaviour:
   actionSpriteMaps:
   - actionName: Attack
     keyboardSprite: {fileID: 21300000, guid: 6db6a6082e709bf4b996538a5ea50179, type: 3}
-    gamepadSprite: {fileID: 21300000, guid: 190c681b266380649a753567f8c5a7b8, type: 3}
+    gamepadSprite: {fileID: 21300000, guid: fc87bb99ad2157345ba63d48be6b4a7b, type: 3}
   - actionName: Dash
     keyboardSprite: {fileID: 21300000, guid: d971d6bd6ec672e43b127a8bc0b55154, type: 3}
-    gamepadSprite: {fileID: 21300000, guid: c6733fe389b34434ab2c2a62d670961e, type: 3}
+    gamepadSprite: {fileID: 21300000, guid: 602dd626879f4284ca0fec0014666941, type: 3}
   - actionName: Interact
     keyboardSprite: {fileID: 21300000, guid: 98058500d1bea25429db0a6b198cfd49, type: 3}
-    gamepadSprite: {fileID: 21300000, guid: 8eb3a8b08435ce74e853a86ecda2ba74, type: 3}
+    gamepadSprite: {fileID: 21300000, guid: 402b36517e199a34cb68f171cfe2537d, type: 3}
   - actionName: CastSpell
     keyboardSprite: {fileID: 21300000, guid: 9a31d5c697887fc43becf85c7d7f18c2, type: 3}
-    gamepadSprite: {fileID: 21300000, guid: 49f6b226c6f10bb4db6e23f8d58914f1, type: 3}
+    gamepadSprite: {fileID: 21300000, guid: 86e9d042cac18b843858c908bb5b7c61, type: 3}
   - actionName: CycleWeapon
     keyboardSprite: {fileID: 21300000, guid: 30e74214ad1cf2f47a13e3e49d7630b5, type: 3}
-    gamepadSprite: {fileID: 21300000, guid: f2f5081ac0d03d74cac813bca1014f6c, type: 3}
+    gamepadSprite: {fileID: 21300000, guid: 6274987bc149dd4479b02c27b29a975e, type: 3}
   - actionName: Pause
     keyboardSprite: {fileID: 21300000, guid: c61cdfe9c5d431e4bb27397e419fb73c, type: 3}
-    gamepadSprite: {fileID: 21300000, guid: eb1a73e6bd0a7694eae6d6f14af09804, type: 3}
+    gamepadSprite: {fileID: 21300000, guid: 5803e3e792aaddc4d92832d21aee0ebb, type: 3}
   - actionName: Inventory
     keyboardSprite: {fileID: 21300000, guid: 1617add69648e2546878459be40ecbcf, type: 3}
-    gamepadSprite: {fileID: 21300000, guid: 3d17578f506041d40b33cf55059e3d8d, type: 3}
+    gamepadSprite: {fileID: 21300000, guid: f0f2c9aaa70249f469e4af1de12347e6, type: 3}
   - actionName: Map
     keyboardSprite: {fileID: 21300000, guid: d228086e27c40b4438d14f7011a06ff5, type: 3}
-    gamepadSprite: {fileID: 21300000, guid: 93ef77cb12184d14eb51ec87cea01c97, type: 3}
+    gamepadSprite: {fileID: 21300000, guid: ccebf3060837f47459c68122b2a44686, type: 3}
   - actionName: Exit
     keyboardSprite: {fileID: 21300000, guid: 51f08da89c51192408cc2078d8ae70c2, type: 3}
-    gamepadSprite: {fileID: 21300000, guid: eb1a73e6bd0a7694eae6d6f14af09804, type: 3}
+    gamepadSprite: {fileID: 21300000, guid: 5803e3e792aaddc4d92832d21aee0ebb, type: 3}
   - actionName: SpecialAttack
     keyboardSprite: {fileID: 21300000, guid: 78d11c4967980354e9ecd11920a4482f, type: 3}
-    gamepadSprite: {fileID: 21300000, guid: 4fe4f1644689892419542245561f74dd, type: 3}
+    gamepadSprite: {fileID: 21300000, guid: d8f0d6c1ec352124db0916a80f6c1daa, type: 3}
   - actionName: TabLeft
     keyboardSprite: {fileID: 21300000, guid: 3245c5c077bc4304faa441f87b2a0f87, type: 3}
-    gamepadSprite: {fileID: 21300000, guid: 1648106972211fb439449099272ec216, type: 3}
+    gamepadSprite: {fileID: 21300000, guid: d75f445bbcd8dcc448c635472eb4d0ee, type: 3}
   - actionName: TabRight
     keyboardSprite: {fileID: 21300000, guid: 054b58569ef21914ea4a068f39e04bf2, type: 3}
-    gamepadSprite: {fileID: 21300000, guid: 317de5937342156459717d6e5302d791, type: 3}
+    gamepadSprite: {fileID: 21300000, guid: d76f46da1b2cfd24fb23a2db215e2a98, type: 3}
   - actionName: Spell1
     keyboardSprite: {fileID: 21300000, guid: f1b8c14ffb3a47f43a2be88528f6deb2, type: 3}
-    gamepadSprite: {fileID: 21300000, guid: 1648106972211fb439449099272ec216, type: 3}
+    gamepadSprite: {fileID: 21300000, guid: d75f445bbcd8dcc448c635472eb4d0ee, type: 3}
   - actionName: Spell2
     keyboardSprite: {fileID: 21300000, guid: 1970f48c7e79bb94a879b741aac2cb3b, type: 3}
-    gamepadSprite: {fileID: 21300000, guid: 317de5937342156459717d6e5302d791, type: 3}
+    gamepadSprite: {fileID: 21300000, guid: d76f46da1b2cfd24fb23a2db215e2a98, type: 3}
   - actionName: Rotate
     keyboardSprite: {fileID: 21300000, guid: 75f797fed865e4f4db255003641554c2, type: 3}
-    gamepadSprite: {fileID: 21300000, guid: 9681d179fffd95946bc72430f51c144e, type: 3}
+    gamepadSprite: {fileID: 21300000, guid: 1de55fce142dec14ab892705d73c61f7, type: 3}
   - actionName: Navigate
     keyboardSprite: {fileID: 21300000, guid: 5bcfcbfdb24f4f549ba9288f05ceb479, type: 3}
-    gamepadSprite: {fileID: 21300000, guid: 9681d179fffd95946bc72430f51c144e, type: 3}
+    gamepadSprite: {fileID: 21300000, guid: 65ba65498162fdc4ea00c85c96a83c62, type: 3}
   - actionName: Select
     keyboardSprite: {fileID: 21300000, guid: 12c196d06e3947d4c8c8591488f4128f, type: 3}
-    gamepadSprite: {fileID: 21300000, guid: 8eb3a8b08435ce74e853a86ecda2ba74, type: 3}
+    gamepadSprite: {fileID: 21300000, guid: 402b36517e199a34cb68f171cfe2537d, type: 3}
