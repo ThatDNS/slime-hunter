@@ -432,6 +432,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spriteSettings: {fileID: 11400000, guid: dfe6b1daa281994478981d5909cefe51, type: 2}
   _debugItem: {fileID: 11400000, guid: 0a3ff79e851e8e148a519caf60b3f362, type: 2}
+  _debugTeleport: {x: 65, y: 0, z: 50}
   inputQueueDelay: 0.3
 --- !u!1 &267344248
 GameObject:
@@ -1721,8 +1722,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showOnStart: 0
-  rollSpeed: 200
-  rollTime: 20
+  rollSpeed: 150
+  rollTime: 35
 --- !u!114 &1557150712
 MonoBehaviour:
   m_ObjectHideFlags: 0
