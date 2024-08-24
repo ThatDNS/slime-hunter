@@ -1,8 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.AddressableAssets.Build;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(CapsuleCollider))]
 public class Player : DynamicDamageTaker
