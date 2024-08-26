@@ -1,16 +1,15 @@
-using Ink.Runtime;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.Rendering.DebugUI;
+using UnityEngine.VFX;
 
 public class HUDMenu : Menu
 {
     [Header("Damage Alert")]
     [Range(1, 100)][SerializeField] int maxAlert = 50;
     [SerializeField] float damageAlertTime = 1.0f;
+    public VisualEffect highlightEffect;
 
     // Player
     VisualElement healthDamageVE;
@@ -126,11 +125,41 @@ public class HUDMenu : Menu
         comboCountLabel = attackComboVE.Q<Label>("ComboLabel");
         isComboHUDUp = false;
         attackComboVE.style.opacity = 0;
+
+        // TODO: Hardcode effect onto main camera
+        CameraManager.Instance.MainCameraChanged += (Camera c) =>
+        {
+            highlightEffect = c.GetComponent<VisualEffect>();
+        };
     }
 
     private void FixedUpdate()
     {
         UpdateCompass();
+    }
+
+    public void HighlightCompass(bool showTrail = true)
+    {
+        HighlightHUDElement(compassContainer, showTrail);
+    }
+
+    private void HighlightHUDElement(VisualElement ve, bool showTrail = true)
+    {
+        if (highlightEffect == null) return;
+
+        // Get the center of element and UI size
+        Vector2 pos = ve.worldBound.center;
+        Vector2 parentSize = root.contentRect.size;
+
+        // Calculate the position as a value between 0 and 1
+        Vector3 target = (pos / parentSize);
+        target.y = 1 - target.y;
+        target.z = 1;
+
+        // Play effect
+        highlightEffect.SetBool("showTrail", showTrail);
+        highlightEffect.SetVector3("endPos", target);
+        highlightEffect.Play();
     }
 
     // ------------------------------ Health ------------------------------
@@ -238,7 +267,7 @@ public class HUDMenu : Menu
         while (lstItem.lifetime > 0)
         {
             lstItem = itemListMap[itemSO];
-            lstItem.lifetime = lstItem.lifetime - Time.unscaledDeltaTime * GameManager.Instance.PlayerSpeedMultiplier;
+            lstItem.lifetime = lstItem.lifetime - Time.unscaledDeltaTime;
             itemListMap[itemSO] = lstItem;
             yield return null;
         }

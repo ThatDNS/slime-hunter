@@ -18,6 +18,8 @@ public class CameraManager : Singleton<CameraManager>
 
     private static Volume _globalVolume;
 
+    public event Action<Camera> MainCameraChanged;
+
     // Look for a global volume in the scene if isn't already set
     public static Volume GlobalVolume
     {
@@ -96,6 +98,8 @@ public class CameraManager : Singleton<CameraManager>
         {
             _activeVCamera = cam.GetComponent<CinemachineBrain>()?.ActiveVirtualCamera as CinemachineVirtualCamera;
         }
+
+        MainCameraChanged.Invoke(_activeCamera);
     }
     
     public void ChangeVirtualCamera(CinemachineVirtualCamera vCam)
@@ -164,7 +168,6 @@ public class CameraManager : Singleton<CameraManager>
     #region PostProcess
 
     // Ideally target would be another VolumeComponent but for simplicity, we'll only set the intensity therefore passing in just a target float
-
     public void SmoothSetVignette(float source, float target, float duration)
     {
         Vignette _vignette;
@@ -229,6 +232,15 @@ public class CameraManager : Singleton<CameraManager>
         }
     }
 
+    public void SetChromatic(float value)
+    {
+        ChromaticAberration _chroma;
+        if (GlobalVolume.profile.TryGet(out _chroma))
+        {
+            _chroma.intensity.value = value;
+        }
+    }
+
     public void SmoothSetChromatic(float target, float duration)
     {
         ChromaticAberration _chroma;
@@ -242,6 +254,15 @@ public class CameraManager : Singleton<CameraManager>
             (float value) => _chroma.intensity.value = value,
             true
             ));
+        }
+    }
+
+    public void SetSaturation(float value)
+    {
+        ColorAdjustments adjust;
+        if (GlobalVolume.profile.TryGet(out adjust))
+        {
+            adjust.saturation.value = value;
         }
     }
 
