@@ -58,8 +58,8 @@ MonoBehaviour:
       Data3: 394413443
       Data4: 123340141
     Path: event:/SoundEffects/Spell/StunSpell
-  animDuration: 1
-  animHeight: 4
+  animDuration: 0.5
+  animHeight: 2
   animCurve:
     serializedVersion: 2
     m_Curve:

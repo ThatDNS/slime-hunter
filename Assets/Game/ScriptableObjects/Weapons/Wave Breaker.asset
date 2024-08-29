@@ -21,12 +21,12 @@ MonoBehaviour:
   value: 0
   weight: 7
   damage:
-    value: 25
+    value: 12
     knockback: 2
     direction: {x: 0, y: 0, z: 0}
     effect: {fileID: 0}
     forceApply: 0
-  range: 3.5
+  range: 5
   hitLayers:
     serializedVersion: 2
     m_Bits: 128

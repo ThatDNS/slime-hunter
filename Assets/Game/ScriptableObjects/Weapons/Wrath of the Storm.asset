@@ -24,9 +24,9 @@ MonoBehaviour:
     value: 20
     knockback: 4
     direction: {x: 0, y: 0, z: 0}
-    effect: {fileID: 0}
+    effect: {fileID: 11400000, guid: 194e3545abb07b94ab515e1afbd829cb, type: 2}
     forceApply: 0
-  range: 4
+  range: 6
   hitLayers:
     serializedVersion: 2
     m_Bits: 128

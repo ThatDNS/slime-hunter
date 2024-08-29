@@ -48,7 +48,6 @@ public class StunSpell : Spell
     {
         // Timer and lerp variable initialization
         float timer = 0;
-        animDuration = 1.0f;
         Vector2 startVec2 = new Vector2(start.x, start.z);
         Vector2 endVec2 = new Vector2(target.x, target.z);
         float startHeight = start.y;
